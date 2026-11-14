@@ -1,4 +1,4 @@
-# Eval results (2026-11-14 12:44)
+# Eval results (2026-11-14 13:38)
 
 PASS 19 | FAIL 0 | SKIP 0  (SKIP = precondition absent today, not a pass)
 
@@ -28,74 +28,92 @@ PASS 19 | FAIL 0 | SKIP 0  (SKIP = precondition absent today, not a pass)
 
 ### E01 (PASS)
 ```
-Pune | 2026-09-04 08:00-23:00 local | Open-Meteo, observed 2026-09-04 08:00
-Wind is strong enough to be a safety risk for cycling or riding a two-wheeler: gusts can push you into traffic. Avoid riding, or choose a sheltered route and a calmer time window. Wind speed may reach 46 km/h and gusts up to 58 km/h.
+Wind is strong enough to be a safety risk for cycling or riding a two-wheeler: gusts can push you into traffic. Avoid riding, or choose a sheltered route and a calmer time window. Wind speed max 46 km/h, wind gusts max 58 km/h.
 
 Policy basis: SOP-CYC-WIND-01 - Strong wind is a safety risk for cyclists and two-wheelers (severity: high)
+Place: Pune
+When: 2026-09-04, 08:00-23:00 local time
+Source: Open-Meteo (observed 2026-09-04 08:00)
 ```
 
 ### E02 (PASS)
 ```
-Jaipur | 2026-09-04 12:00-16:00 local | Open-Meteo, observed 2026-09-04 08:00
 UV is very high (uv_index max over 12:00-16:00 = 9); advise against unprotected outdoor exercise in that window, recommend sunscreen, a hat and sunglasses, and reschedule to early morning or evening.
 
 Policy basis: SOP-EX-UV-01 - High UV at midday (severity: moderate)
+Place: Jaipur
+When: 2026-09-04, 12:00-16:00 local time
+Source: Open-Meteo (observed 2026-09-04 08:00)
 ```
 
 ### E03 (PASS)
 ```
-Mumbai | 2026-09-05 00:00-23:00 local | Open-Meteo, observed 2026-09-04 08:00
-Wind is strong enough to be a safety risk for cycling or riding a two-wheeler: gusts can push you into traffic. Wind speeds reach up to 50 km/h with gusts up to 62 km/h. Avoid riding, or choose a sheltered route and a calmer time window.
+Wind is strong enough to be a safety risk for cycling or riding a two-wheeler, with wind speeds reaching 50 km/h and gusts up to 62 km/h; avoid riding, or choose a sheltered route and a calmer time window.
 
 Policy basis: SOP-CYC-WIND-01 - Strong wind is a safety risk for cyclists and two-wheelers (severity: high)
+Place: Mumbai
+When: 2026-09-05, 00:00-23:00 local time
+Source: Open-Meteo (observed 2026-09-04 08:00)
 ```
 
 ### E04 (PASS)
 ```
-Delhi | 2026-09-04 08:00-23:00 local | Open-Meteo, observed 2026-09-04 08:00
 Heat (38 °C) is risky for older adults. Keep outdoor outings brief and near shelter, avoid exertion, dress for the conditions, and let someone know the plan.
 
 Policy basis: SOP-ELDER-TEMP-01 - Temperature extremes for the elderly (severity: high)
+Place: Delhi
+When: 2026-09-04, 08:00-23:00 local time
+Source: Open-Meteo (observed 2026-09-04 08:00)
 ```
 
 ### E05 (PASS)
 ```
-Kochi | 2026-09-05 00:00-23:00 local | Open-Meteo, observed 2026-09-04 08:00
-This is not a good window for a picnic. Move it to another day or time. Comfort score is 0.43 (poor). Apparent temperature mean is 25 °C. Precipitation probability max is 85 %. Wind speed max is 33 km/h. UV index max is 2.
+This is not a good window for a picnic. Move it to another day or time. The forecast shows a precipitation probability up to 85 % and a wind speed reaching 33 km/h, with an apparent temperature around 25 °C and a UV index of 2.
 
 Policy basis: SOP-LEISURE-PICNIC-01 - Picnic suitability (graded comfort score) (severity: moderate)
+Place: Kochi
+When: 2026-09-05, 00:00-23:00 local time
+Source: Open-Meteo (observed 2026-09-04 08:00)
 ```
 
 ### E06 (PASS)
 ```
-Chennai | 2026-09-04 08:00-23:00 local | Open-Meteo, observed 2026-09-04 08:00
-Wind is strong enough to be a safety risk for cycling or riding a two-wheeler: gusts can push you into traffic. Avoid riding, or choose a sheltered route and a calmer time window (wind_speed_10m max 45 km/h). Heat or UV is a concern for children, who overheat faster; keep outdoor time short and in shade, prefer early morning or late afternoon, apply child‑safe sunscreen and bring water (apparent_temperature max 36 °C, uv_index max 9). UV is very high between 11:00 and 16:00; advise against unprotected outdoor exercise in that window, recommend sunscreen, a hat and sunglasses, and reschedule to early morning or evening (uv_index max 9).
+Wind is strong enough to be a safety risk for cycling or riding a two-wheeler: gusts can push you into traffic. Wind gusts reach 45 km/h, so avoid riding or choose a sheltered route and a calmer time window. Heat and UV pose a concern for children; keep outdoor time short and in shade, prefer early morning or late afternoon, use child‑safe sunscreen and bring water, as apparent temperature can reach 36 °C and UV index 9. UV is very high between 11:00 and 16:00 with an index of 9, so do not do unprotected outdoor exercise then; use sunscreen, a hat and sunglasses or reschedule to early morning or evening.
 
 Policy basis: SOP-CYC-WIND-01 - Strong wind is a safety risk for cyclists and two-wheelers (severity: high); also SOP-CHILD-HEAT-UV-01 (high); also SOP-EX-UV-01 (moderate)
+Place: Chennai
+When: 2026-09-04, 08:00-23:00 local time
+Source: Open-Meteo (observed 2026-09-04 08:00)
 ```
 
 ### E07 (PASS)
 ```
-Hong Kong | 2026-11-14 15:00-23:00 local | Open-Meteo, observed 2026-11-14 15:00
-Heavy rain and possible flooding make outdoor plans high‑risk for cycling. Postpone non‑essential cycling, avoid low‑lying roads and underpasses, and check official IMD or local authority alerts before heading out. The forecast indicates a precipitation total of 85.9 mm, exceeding the 64.5 mm threshold.
+Heavy rain and possible flooding or waterlogging make outdoor plans high‑risk whatever the activity. Postpone non‑essential outdoor activity, avoid low‑lying roads and underpasses, and check official (IMD / local authority) alerts before going out. Precipitation sum daily total/extreme is 85.9 mm (rule: >= 64.5).
 
 Policy basis: SOP-SEV-RAIN-SYSTEM-01 - Organised heavy-rain system overrides activity advice (severity: high)
+Place: Hong Kong
+When: 2026-11-14, 16:00-23:00 local time
+Source: Open-Meteo (observed 2026-11-14 16:00)
 ```
 
 ### E07b (PASS)
 ```
-Bhopal | 2026-09-04 08:00-23:00 local | Open-Meteo, observed 2026-09-04 08:00
-Heavy rain and possible flooding or waterlogging make outdoor plans high‑risk for cycling. Postpone non‑essential outdoor activity, avoid low‑lying roads and underpasses, and check official IMD or local authority alerts before going out. Expected precipitation total is 41.2 mm and wind gusts may reach 52 km/h.
+Heavy rain and possible flooding or waterlogging make outdoor plans high‑risk whatever the activity. Postpone non‑essential outdoor activity, avoid low‑lying roads and underpasses, and check official (IMD / local authority) alerts before going out. Precipitation total is 41.2 mm and wind gusts reach 52 km/h.
 
 Policy basis: SOP-SEV-RAIN-SYSTEM-01 - Organised heavy-rain system overrides activity advice (severity: high)
+Place: Bhopal
+When: 2026-09-04, 08:00-23:00 local time
+Source: Open-Meteo (observed 2026-09-04 08:00)
 ```
 
 ### E08 (PASS)
 ```
-Bhopal, Madhya Pradesh, India | 2026-11-14 12:00-23:00 local | Open-Meteo, observed 2026-11-14 12:30
-Weather is within our comfort thresholds for outdoor exercise. Standard precautions apply: hydrate and use sun protection if you are out in daylight. The apparent temperature will reach a maximum of 29.3 °C.
+Weather is within our comfort thresholds for outdoor exercise. Standard precautions apply: hydrate and use sun protection if you are out in daylight. Temperatures will range from a minimum of 21.2 °C to a maximum of 29 °C, wind speeds may reach 6.2 km/h, and the UV index can rise to 5.7.
 
 Policy basis: SOP-EX-OK-01 - Conditions within comfort thresholds for exercise (severity: info)
+Place: Bhopal, Madhya Pradesh, India
+When: 2026-11-14, 13:00-23:00 local time
+Source: Open-Meteo (observed 2026-11-14 13:30)
 ```
 
 ### E09 (PASS)
@@ -107,10 +125,12 @@ Policy basis: none (no advice given).
 
 ### E10 (PASS)
 ```
-Pune | 2026-09-04 08:00-11:00 local | Open-Meteo, observed 2026-09-04 08:00
 None of our written policies were triggered for this question and window. That is not a safety clearance: I have no rule that says conditions are fine, so I won't offer advice. Right now: 24°C, wind 8 km/h, precipitation 0 mm.
 
 Policy basis: none applies.
+Place: Pune
+When: 2026-09-04, 08:00-11:00 local time
+Source: Open-Meteo (observed 2026-09-04 08:00)
 ```
 
 ### E11 (PASS)
@@ -136,18 +156,22 @@ Policy basis: none (no advice given).
 
 ### E14 (PASS)
 ```
-Pune | 2026-09-04 08:00-23:00 local | Open-Meteo, observed 2026-09-04 08:00
 Thunderstorms are forecast in your time window. Do not be outdoors in open areas, on water, or on ridges; shelter in a building or a hard‑topped vehicle and postpone the activity until the storm has passed. The weather_code in the window includes WMO code 95 (thunderstorm).
 
 Policy basis: SOP-SEV-THUNDER-01 - Thunderstorm / lightning (severity: critical)
+Place: Pune
+When: 2026-09-04, 08:00-23:00 local time
+Source: Open-Meteo (observed 2026-09-04 08:00)
 ```
 
 ### E15 (PASS)
 ```
-Pune | 2026-09-04 08:00-23:00 local | Open-Meteo, observed 2026-09-04 08:00
-Wind is strong enough to be a safety risk for cycling or riding a two-wheeler: gusts can push you into traffic. Wind speed may reach 46 km/h and gusts up to 60 km/h. Avoid riding, or choose a sheltered route and a calmer time window.
+Wind is strong enough to be a safety risk for cycling or riding a two-wheeler: gusts can push you into traffic. Avoid riding, or choose a sheltered route and a calmer time window. Observed wind speed max 46 km/h and wind gusts max 60 km/h.
 
 Policy basis: SOP-CYC-WIND-01 - Strong wind is a safety risk for cyclists and two-wheelers (severity: high)
+Place: Pune
+When: 2026-09-04, 08:00-23:00 local time
+Source: Open-Meteo (observed 2026-09-04 08:00)
 ```
 
 ### E16 (PASS)
@@ -166,8 +190,10 @@ Policy basis: as cited above.
 
 ### E18 (PASS)
 ```
-Chennai | 2026-09-04 08:00-23:00 local | Open-Meteo, observed 2026-09-04 08:00
-High humidity (relative_humidity_2m max over 08:00-23:00 = 95): Humidity is very high; slow your pace and drink extra water.
+High humidity: Humidity is very high; slow your pace and drink extra water. relative_humidity_2m max over 08:00-23:00 = 95 (rule: >= 90).
 
 Policy basis: SOP-LIVE-11 - Very humid air (severity: low)
+Place: Chennai
+When: 2026-09-04, 08:00-23:00 local time
+Source: Open-Meteo (observed 2026-09-04 08:00)
 ```
