@@ -1,0 +1,59 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Weather Advisory Bot</title>
+<style>
+ *{box-sizing:border-box}
+ body{margin:0;height:100dvh;display:flex;flex-direction:column;align-items:center;padding:16px;
+  font:15px/1.5 system-ui,sans-serif;color:#111;background:#fff}
+ .app{width:100%;max-width:720px;height:100%;display:flex;flex-direction:column;gap:12px}
+ header{display:flex;justify-content:space-between;align-items:center}
+ h1{font-size:20px;margin:0}
+ .intro{margin:0;color:#555;font-size:14px}
+ #log{flex:1;overflow:auto;padding:4px 0;border-top:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb}
+ .m{margin:10px 0;padding:10px 14px;border-radius:12px;white-space:pre-wrap;max-width:88%;overflow-wrap:anywhere}
+ .u{background:#111;color:#fff;margin-left:auto}
+ .b{background:#f3f4f6}
+ details{font-size:12px;color:#555;margin-top:6px} pre{white-space:pre-wrap;margin:4px 0}
+ form{display:flex;gap:8px}
+ input{flex:1;min-width:0;padding:12px 14px;border:1px solid #d1d5db;border-radius:10px;font:inherit;outline:none}
+ input:focus{border-color:#111}
+ button{width:44px;height:44px;border:0;border-radius:10px;cursor:pointer;display:grid;place-items:center;color:#fff;background:#111}
+ button.ghost{background:#fff;color:#111;border:1px solid #d1d5db}
+ button:hover{opacity:.85} svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+</style>
+<div class="app">
+ <header>
+  <h1>Weather Advisory Bot</h1>
+  <button class="ghost" id="new" type="button" title="New session" aria-label="New session">
+   <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+ </header>
+ <p class="intro">Live-weather safety advice for outdoor plans, based only on our written policies. I cover: outdoor exercise (cycling, running, hiking), travel (driving, scooter or motorbike), children, elderly and pets outdoors, and picnics. Include a city, e.g. "Is it safe to cycle in Pune today?"</p>
+ <div id="log"></div>
+ <form id="f">
+  <input id="q" autocomplete="off" placeholder="e.g. Is it safe to bike to work in Bhopal today?" autofocus>
+  <button title="Send" aria-label="Send"><svg viewBox="0 0 24 24"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button>
+ </form>
+</div>
+<script>
+let sid = crypto.randomUUID();   // memory is per session id; "New session" starts a fresh one
+const log = document.getElementById('log');
+function add(text, cls, trace){
+  const d = document.createElement('div'); d.className = 'm ' + cls; d.textContent = text;
+  if (trace){ const t = document.createElement('details'); const s = document.createElement('summary');
+    s.textContent = 'Why this answer? (trace)'; const p = document.createElement('pre');
+    p.textContent = JSON.stringify(trace, null, 2); t.append(s, p); d.append(t); }
+  log.append(d); log.scrollTop = log.scrollHeight; return d;
+}
+const hello = () => add('Hi! What outdoor plan are you thinking about, and where?', 'b');
+hello();
+document.getElementById('new').onclick = () => { sid = crypto.randomUUID(); log.innerHTML = ''; hello(); };
+document.getElementById('f').onsubmit = async e => {
+  e.preventDefault(); const q = document.getElementById('q'); const m = q.value.trim(); if(!m) return;
+  q.value = ''; add(m, 'u'); const wait = add('...', 'b');
+  try {
+    const r = await fetch('/api/chat', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({session_id: sid, message: m})});
+    if(!r.ok) throw new Error('HTTP ' + r.status);
+    const j = await r.json(); wait.remove(); add(j.reply, 'b', j.trace);
+  } catch(err){ wait.remove(); add('Server error: ' + err.message, 'b'); }
+};
+</script>

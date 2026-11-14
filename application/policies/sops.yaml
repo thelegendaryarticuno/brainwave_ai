@@ -1,0 +1,194 @@
+# SOPs
+topics:
+  outdoor_activity: {description: "Any outdoor activity (root)"}
+  outdoor_exercise: {parent: outdoor_activity, description: "Exercise outdoors in general (gym-in-the-park, workouts, sports)"}
+  cycling:          {parent: outdoor_exercise, description: "Cycling, biking, bike ride, riding a bicycle"}
+  running:          {parent: outdoor_exercise, description: "Running or jogging"}
+  hiking:           {parent: outdoor_exercise, description: "Hiking, trekking, trail walking"}
+  travel:           {parent: outdoor_activity, description: "Getting somewhere outdoors / on the road"}
+  road_travel:      {parent: travel, description: "Driving, road trips, commuting by car/bus/taxi"}
+  two_wheeler:      {parent: travel, description: "Motorbike, scooter, moped, riding a two-wheeler (also covers cycling commutes)"}
+  vulnerable:       {parent: outdoor_activity, description: "Outdoor plans involving vulnerable groups"}
+  children:         {parent: vulnerable, description: "Kids, toddlers, babies, taking a child to the park/playground/school"}
+  elderly:          {parent: vulnerable, description: "Elderly people, grandparents, senior citizens"}
+  pets:             {parent: vulnerable, description: "Dogs/cats/pets, walking the dog"}
+  leisure:          {parent: outdoor_activity, description: "Casual outdoor leisure and social plans"}
+  picnic:           {parent: leisure, description: "Picnic, lunch/barbecue in a park, 'good day to be outside with friends', spreading a blanket on the grass"}
+
+sops:
+  - id: SOP-SEV-RAIN-SYSTEM-01
+    category: severe_weather
+    title: Organised heavy-rain system overrides activity advice
+    severity: high
+    applies_to: ["*"]
+    lead_with: true
+    supersedes: [SOP-TRAVEL-RAIN-01, SOP-CYC-WET-01]
+    when:
+      any:
+        - {source: daily, metric: precipitation_sum, op: ">=", value: 64.5}          # IMD "heavy" 24h threshold
+        - all:                                                                        # wet day + strong wind
+            - {source: daily, metric: precipitation_sum, op: ">=", value: 35}
+            - {source: hourly, metric: wind_gusts_10m, agg: max, op: ">=", value: 45}
+        - all:                                                                        # heavy-rain WMO code on a wet day
+            - {source: hourly, metric: weather_code, op: in, value: [65, 82]}
+            - {source: daily, metric: precipitation_sum, op: ">=", value: 25}
+    guidance: >
+      A heavy-rain system is affecting this location. Lead with that: heavy rain and possible flooding or waterlogging
+      make outdoor plans high-risk whatever the activity. Postpone non-essential outdoor activity, avoid low-lying roads
+      and underpasses, and check official (IMD / local authority) alerts before going out.
+
+  - id: SOP-SEV-THUNDER-01
+    category: severe_weather
+    title: Thunderstorm / lightning
+    severity: critical
+    applies_to: ["*"]
+    lead_with: true
+    when: {source: hourly, metric: weather_code, op: in, value: [95, 96, 99]}
+    guidance: >
+      Thunderstorms are forecast in your time window. Do not be outdoors in open areas, on water, or on ridges; shelter in a
+      building or a hard-topped vehicle and postpone the activity until the storm has passed.
+
+  - id: SOP-EX-UV-01
+    category: outdoor_exercise
+    title: High UV at midday
+    severity: moderate
+    applies_to: [outdoor_exercise]
+    when: {metric: uv_index, hours: [11, 16], op: ">=", value: 8}
+    guidance: >
+      UV is very high between 11am and 4pm. Advise against unprotected outdoor exercise in that window; recommend sunscreen,
+      a hat and sunglasses, and rescheduling to early morning or evening.
+
+  - id: SOP-EX-HEAT-01
+    category: outdoor_exercise
+    title: Dangerous heat stress
+    severity: high
+    applies_to: [outdoor_exercise]
+    when: {metric: apparent_temperature, op: ">=", value: 40}
+    guidance: >
+      The feels-like temperature is in the heat-stress range. Do not do strenuous outdoor exercise now; move it indoors or to
+      a much cooler time, carry water, and stop at the first sign of dizziness or cramps.
+
+  - id: SOP-EX-COLD-01
+    category: outdoor_exercise
+    title: Near-freezing conditions
+    severity: low
+    applies_to: [outdoor_exercise]
+    when: {metric: apparent_temperature, agg: min, op: "<=", value: 0}
+    guidance: >
+      It feels at or below freezing. Warm up indoors first, dress in layers, and watch for icy surfaces; shorten the session.
+
+  - id: SOP-EX-OK-01
+    category: outdoor_exercise
+    title: Conditions within comfort thresholds for exercise
+    severity: info
+    applies_to: [outdoor_exercise]
+    when:
+      all:
+        - {metric: apparent_temperature, agg: max, op: "<", value: 32}
+        - {metric: apparent_temperature, agg: min, op: ">", value: 5}
+        - {metric: wind_speed_10m, op: "<", value: 30}
+        - {metric: precipitation_probability, op: "<", value: 40}
+        - {metric: uv_index, op: "<", value: 8}
+    guidance: >
+      Weather is within our comfort thresholds for outdoor exercise. Standard precautions apply: hydrate and use sun
+      protection if you are out in daylight.
+
+  # cycling / two-wheelers 
+  - id: SOP-CYC-WIND-01
+    category: outdoor_exercise
+    title: Strong wind is a safety risk for cyclists and two-wheelers
+    severity: high
+    applies_to: [cycling, two_wheeler]
+    when:
+      any:
+        - {metric: wind_speed_10m, op: ">", value: 40}
+        - {metric: wind_gusts_10m, op: ">=", value: 55}
+    guidance: >
+      Wind is strong enough to be a safety risk, not just a comfort issue, for cycling or riding a two-wheeler: gusts can push
+      you into traffic. Avoid riding, or choose a sheltered route and a calmer time window.
+
+  - id: SOP-CYC-WET-01
+    category: travel
+    title: Wet roads for cyclists and two-wheelers
+    severity: moderate
+    applies_to: [cycling, two_wheeler]
+    when:
+      any:
+        - {metric: precipitation_probability, op: ">=", value: 60}
+        - {metric: precipitation, op: ">=", value: 2.5}
+    guidance: >
+      Rain is likely or falling, which reduces grip and braking. If you must ride, slow down, increase following distance,
+      use lights, and avoid painted road markings and metal covers; otherwise delay until it clears.
+
+  #  travel 
+  - id: SOP-TRAVEL-RAIN-01
+    category: travel
+    title: Likely rain on road trips
+    severity: low
+    applies_to: [travel]
+    when: {metric: precipitation_probability, op: ">=", value: 70}
+    guidance: >
+      Rain is likely, so expect possible delays. Check local alerts and traffic before departure and allow extra time.
+
+  - id: SOP-TRAVEL-VIS-01
+    category: travel
+    title: Poor visibility (fog / heavy precipitation)
+    severity: high
+    applies_to: [road_travel, two_wheeler]
+    when: {metric: visibility, agg: min, op: "<", value: 1000}
+    guidance: >
+      Visibility is below 1 km. Delay non-essential travel; if you must go, use low-beam/fog lights, reduce speed sharply and
+      keep a long gap to the vehicle ahead.
+
+  #  vulnerable groups 
+  - id: SOP-CHILD-HEAT-UV-01
+    category: vulnerable_groups
+    title: Heat or strong sun for children
+    severity: high
+    applies_to: [children]
+    when:
+      any:
+        - {metric: apparent_temperature, op: ">=", value: 35}
+        - {metric: uv_index, op: ">=", value: 6}
+    guidance: >
+      Heat or UV is a concern for children, who overheat faster. Keep outdoor time short and in shade, prefer early morning or
+      late afternoon, apply child-safe sunscreen, and bring water.
+
+  - id: SOP-ELDER-TEMP-01
+    category: vulnerable_groups
+    title: Temperature extremes for the elderly
+    severity: high
+    applies_to: [elderly]
+    when:
+      any:
+        - {metric: apparent_temperature, op: ">=", value: 36}
+        - {metric: apparent_temperature, agg: min, op: "<=", value: 5}
+    guidance: >
+      Heat or cold at this level is risky for older adults. Keep outdoor outings brief and near shelter, avoid exertion, dress
+      for the conditions, and let someone know the plan.
+
+  - id: SOP-PET-HEAT-01
+    category: vulnerable_groups
+    title: Hot pavement and heat for pets
+    severity: moderate
+    applies_to: [pets]
+    when: {metric: temperature_2m, op: ">=", value: 32}
+    guidance: >
+      It is hot enough that pavement can burn paws and pets can overheat. Walk early morning or after sunset, carry water, and
+      never leave a pet in a parked vehicle.
+
+  #  fuzzy / non-numeric 
+  - id: SOP-LEISURE-PICNIC-01
+    category: leisure
+    title: Picnic suitability (graded comfort score)
+    applies_to: [picnic]
+    scored:
+      factors:
+        - {metric: apparent_temperature, agg: mean, ideal: [18, 28], tolerable: [12, 32], weight: 2}
+        - {metric: precipitation_probability, agg: max, ideal: [0, 20], tolerable: [0, 40], weight: 3}
+        - {metric: wind_speed_10m, agg: max, ideal: [0, 20], tolerable: [0, 30], weight: 1}
+        - {metric: uv_index, agg: max, ideal: [0, 6], tolerable: [0, 8], weight: 1}
+      bands:
+        - {min_score: 0.8, severity: info, label: good, guidance: "Conditions look good for a picnic. Pick a shaded spot and bring water."}
+        - {min_score: 0.5, severity: low, label: fair, guidance: "A picnic is possible but not ideal. Have a backup plan (covered spot or a different time) and check the forecast again before leaving."}
+        - {min_score: 0.0, severity: moderate, label: poor, guidance: "This is not a good window for a picnic. Move it to another day or time."}
