@@ -137,3 +137,19 @@ def test_broken_edit_keeps_last_good_policy(tmp_path):
     p.write_text("sops: [ {id: x} ]\ntopics: {}", encoding="utf-8")
     bump(p)
     assert len(st.sops) == n and st.error
+
+
+def test_forecast_retries_a_network_blip():
+    import httpx
+    from bot import weather as wx
+    calls = {"n": 0}
+
+    def handler(req):
+        calls["n"] += 1
+        if calls["n"] < 3:
+            raise httpx.ConnectTimeout("handshake timed out")
+        return httpx.Response(200, json={"current": {"time": "2026-09-04T08:00", "temperature_2m": 20},
+                                         "hourly": {"time": []}, "daily": {"time": []}})
+    snap = wx.fetch_forecast({"name": "X", "latitude": 1, "longitude": 2}, {},
+                             client=httpx.Client(transport=httpx.MockTransport(handler)))
+    assert calls["n"] == 3 and snap["current"]["temperature_2m"] == 20

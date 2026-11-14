@@ -1,6 +1,8 @@
 """Open-Meteo se location aur forecast lana. Bot jo bhi number bolta hai wo yahin se aata hai."""
 from __future__ import annotations
 
+import time
+
 import httpx
 
 GEO_URL = "https://geocoding-api.open-meteo.com/v1/search"
@@ -29,10 +31,21 @@ class WeatherError(Exception):
         self.kind = kind
 
 
+def _get(c: httpx.Client, url: str, params: dict) -> httpx.Response:
+    """GET with retry: timeout ya connection error par 3 baar try karo (server pe network kabhi kabhi atak jata hai)."""
+    for attempt in range(3):
+        try:
+            return c.get(url, params=params)
+        except httpx.TransportError:
+            if attempt == 2:
+                raise
+            time.sleep(1 + attempt)
+
+
 def geocode(name: str, country_hint: str | None = None, client: httpx.Client | None = None) -> dict:
-    c = client or httpx.Client(timeout=10)
+    c = client or httpx.Client(timeout=20)
     try:
-        r = c.get(GEO_URL, params={"name": name, "count": 10, "language": "en", "format": "json"})
+        r = _get(c, GEO_URL, {"name": name, "count": 10, "language": "en", "format": "json"})
         r.raise_for_status()
         results = r.json().get("results") or []
     except (httpx.HTTPError, ValueError) as e:
@@ -53,13 +66,13 @@ def geocode(name: str, country_hint: str | None = None, client: httpx.Client | N
 
 def fetch_forecast(loc: dict, need: dict[str, set[str]], client: httpx.Client | None = None) -> dict:
     """2 din ka current + hourly + daily laata hai. `need` = SOPs ko jo extra variables chahiye."""
-    c = client or httpx.Client(timeout=15)
+    c = client or httpx.Client(timeout=20)
 
     def call(variables: dict[str, set[str]]):
         params = {"latitude": loc["latitude"], "longitude": loc["longitude"], "timezone": "auto",
                   "forecast_days": 2, "current": ",".join(sorted(variables["current"])),
                   "hourly": ",".join(sorted(variables["hourly"])), "daily": ",".join(sorted(variables["daily"]))}
-        return c.get(FORECAST_URL, params=params)
+        return _get(c, FORECAST_URL, params)
 
     merged = {k: BASE[k] | need.get(k, set()) for k in BASE}
     try:

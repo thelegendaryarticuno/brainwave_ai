@@ -21,7 +21,7 @@ uvicorn app:app --reload          # backend + frontend on http://127.0.0.1:8000
 * **Model**: any OpenAI-compatible endpoint. `.env.example` shows GitHub Models; the tested setup is Groq via `LLM_BASE_URL`/`LLM_API_KEY` (`AI_MODEL_FAST` = understanding,
   `AI_MODEL_SMART` = wording). `.env` is git-ignored; `.env.example` holds placeholders only.
 * **Two separate suites, on purpose**:
-  * **Unit tests** (`tests/`, 39 tests): `pytest -q`. Offline: fake model, hand-built weather, no network, no key. Fast and deterministic;
+  * **Unit tests** (`tests/`, 40 tests): `pytest -q`. Offline: fake model, hand-built weather, no network, no key. Fast and deterministic;
     they cover SOP matching, conflict rules, every graph branch, the grounding gate, memory and the 11th-SOP hot reload.
   * **Evals** (`evals/run_evals.py`, 19 cases): `python -m evals.run_evals`. Real model + live Open-Meteo, prints PASS/FAIL/SKIP and writes
     `evals/RESULTS.md`. Not in pytest because paraphrase/injection cases are meaningless with a fake model, and live weather and
@@ -100,7 +100,7 @@ replay E07b, E08 live Bhopal invariants), no-SOP cases (E09-E11), unreachable AP
 
 **Honest notes**
 
-* **Where I ran what.** 39 offline tests pass. The full eval suite was run once against Groq (`openai/gpt-oss-120b` wording,
+* **Where I ran what.** 40 offline tests pass. The full eval suite was run once against Groq (`openai/gpt-oss-120b` wording,
   `openai/gpt-oss-20b` understanding) with live Open-Meteo: **19 PASS / 0 FAIL / 0 SKIP** (see `evals/RESULTS.md`, with sample replies).
   One run, one model: LLM behaviour is not deterministic, so re-run before trusting it. In a manual run the first wording draft was sometimes
   rejected by the grounding gate and retried (the gate working as designed), and an earlier run exposed two bugs now fixed (geocoder picking a
