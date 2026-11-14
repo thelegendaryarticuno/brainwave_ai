@@ -363,9 +363,12 @@ def build_graph(deps: Deps, checkpointer=None):
         head = ""
         if snap and w and s["kind"] in ("sop_llm", "sop_template", "no_sop"):
             loc = s["location"]
-            head = (f"{snap['location']} | {w['day']} {hhmm(w['hours'][0])}-{hhmm(w['hours'][1])} local | "
-                    f"Open-Meteo, observed {snap['current']['time'].replace('T', ' ')}"
-                    + (" | several places share this name; I used the first match, tell me if you meant another" if loc.get("ambiguous") else "") + "\n")
+            # pehle jawab, uske baad details: jagah, samay, source (neeche reply me jodte hain)
+            head = (f"\n\nPlace: {snap['location']}"
+                    f"\nWhen: {w['day']}, {hhmm(w['hours'][0])}-{hhmm(w['hours'][1])} local time"
+                    f"\nSource: Open-Meteo (observed {snap['current']['time'].replace('T', ' ')})"
+                    + ("\nNote: several places share this name, I used the first match. Tell me if you meant another."
+                       if loc.get("ambiguous") else ""))
         p = r.get("primary")
         if s["kind"] in ("sop_llm", "sop_template"):
             more = [m for m in r["secondary"]]
@@ -379,7 +382,7 @@ def build_graph(deps: Deps, checkpointer=None):
             foot = ""
         else:  # explain
             foot = "\n\nPolicy basis: as cited above."
-        reply = head + s["body"] + foot
+        reply = s["body"] + foot + head
         entry = None
         if s.get("intent") == "advice" and s["kind"] != "explain":
             entry = {"turn": len(s.get("decision_log") or []) + 1, "place": (snap or {}).get("location", (s.get("loc_req") or {}).get("name")),
